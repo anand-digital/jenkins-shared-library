@@ -16,7 +16,7 @@ def call(body) {
 			stage ('Compile Stage') {   
 				sh "echo 'building ${config.projectName} ...'"
 				withMaven(maven : 'maven-3.9.1') {
-					sh 'mvn clean compile'
+					sh 'mvn -B -DskipTests clean package'
 				}
 			}
 			stage ('Testing Stage') {
@@ -26,7 +26,7 @@ def call(body) {
 			}
 			stage ('Deployment Stage') {
 				withMaven(maven : 'maven-3.9.1') {
-					sh 'mvn deploy'
+					sh './jenkins/scripts/deliver.sh'
 				}
 			}			       
 		} catch (err) {
